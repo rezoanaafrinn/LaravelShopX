@@ -11,7 +11,7 @@ class Order extends Model
         'status',
     ];
 
-    // Relationships
+    
     public function customer()
     {
         return $this->belongsTo(Customer::class);

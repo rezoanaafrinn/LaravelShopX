@@ -1,4 +1,4 @@
-@extends('layouts.admin') {{-- Make sure you have a basic layout --}}
+@extends('layouts.admin') 
 @section('content')
     <h2>All Orders</h2>
 

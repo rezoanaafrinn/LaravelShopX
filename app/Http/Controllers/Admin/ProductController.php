@@ -20,29 +20,32 @@ class ProductController extends Controller
         $categories = Category::all();
         return view('admin.products.create', compact('categories'));
     }
+//     public function store(Request $request)
+// {
+//     dd($request->all());
+// }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'name'        => 'required|string|max:255',
-            'price'       => 'required|numeric',
-            'description' => 'nullable|string',
-            'category_id' => 'required|exists:categories,id',
-            'image'       => 'nullable|image|max:2048',
-        ]);
+{
+    $request->validate([
+        'name'        => 'required',
+        'price'       => 'required|numeric',
+        'category_id' => 'required|exists:categories,id',
+    ]);
 
-        $product = new Product($request->only('name', 'price', 'description', 'category_id'));
+    $product = Product::create([
+        'name'        => $request->name,
+        'price'       => $request->price,
+        'description' => $request->description,
+        'category_id' => $request->category_id,
+        'image'       => null,
+    ]);
 
-        if ($request->hasFile('image')) {
-            $filename = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('uploads'), $filename);
-            $product->image = $filename;
-        }
+    return redirect()->route('products.index')->with('success', 'Product created successfully.');
 
-        $product->save();
+    // dd('Saved!', $product); // This will confirm if the record was inserted
+}
 
-        return redirect()->route('products.index')->with('success', 'Product created successfully.');
-    }
 
     public function edit(Product $product)
     {
